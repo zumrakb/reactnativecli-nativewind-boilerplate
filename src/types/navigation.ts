@@ -1,10 +1,8 @@
-export type Screen = 'Dashboard' | 'ExpenseInput' | 'Profile' | 'Settings';
+export type Screen = 'Dashboard';
 
 export type RootStackParamList = {
   Dashboard: undefined;
-  ExpenseInput: undefined;
-  Profile: undefined;
-  Settings: undefined;
+  // Add more screen types here as you create new screens
 };
 
 declare global {
