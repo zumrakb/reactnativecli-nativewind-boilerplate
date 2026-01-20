@@ -3,6 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
 import HomeScreen from '../screens/HomeScreen';
+import AboutScreen from '../screens/AboutScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -20,7 +22,14 @@ const AppNavigator: React.FC = () => {
           name="Dashboard" 
           component={HomeScreen}
         />
-        {/* Add more screens here as needed */}
+        <Stack.Screen 
+          name="About" 
+          component={AboutScreen}
+        />
+        <Stack.Screen 
+          name="Settings" 
+          component={SettingsScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
