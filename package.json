@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "An open-source React Native application with navigation, i18n, and Tailwind (NativeWind) styling.",
   "private": false,
+  "license": "GPL-3.0-or-later",
   "author": {
     "name": "zumra",
     "url": "https://github.com/zumrakb"
