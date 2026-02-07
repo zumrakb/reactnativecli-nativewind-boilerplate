@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "An open-source React Native application with navigation, i18n, and Tailwind (NativeWind) styling.",
   "private": false,
+  "license": "MIT",
 
   "author": {
     "name": "zumra",
@@ -15,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/zumrakb/reactnativecli-nativewind-boilerplate/issues"
   },
-  "homepage": "hhttps://github.com/zumrakb/reactnativecli-nativewind-boilerplate#readme",
+  "homepage": "https://github.com/zumrakb/reactnativecli-nativewind-boilerplate#readme",
   "keywords": [
     "react-native",
     "opensource",

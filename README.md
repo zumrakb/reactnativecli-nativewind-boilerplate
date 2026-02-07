@@ -13,6 +13,9 @@
     <a href="https://github.com/zumrakb/reactnativecli-nativewind-boilerplate">
       <img alt="Repo" src="https://img.shields.io/badge/GitHub-Repository-6366f1?style=for-the-badge" />
     </a>
+    <a href="./LICENSE">
+      <img alt="License" src="https://img.shields.io/badge/License-MIT-f59e0b?style=for-the-badge" />
+    </a>
   </p>
 </div>
 
@@ -98,3 +101,6 @@ Replace the banner in `src/assets/banner.png` with your own image if needed.
 
 ## Contributing
 PRs and suggestions are welcome. If you build something cool with this boilerplate, feel free to share it.
+
+## License
+This project is licensed under the MIT License. See the `LICENSE` file for details.
