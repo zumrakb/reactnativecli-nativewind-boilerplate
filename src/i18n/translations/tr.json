@@ -8,22 +8,17 @@
     "navTitle": "Gezinme kontrolü",
     "navBody": "Buradaysan, React Navigation seni buraya getirdi.",
     "languageTitle": "Dil kontrolü",
-    "languageBody": "Bu metni, Ana Sayfa'da seçtiğin dilde görüyorsun.",
-    "cancel": "İptal",
-    "open": "Aç"
+    "languageBody": "Bu metni, Ana Sayfa'da seçtiğin dilde görüyorsun."
   },
   "languages": {
     "title": "Dil",
     "subtitle": "Tercih ettiğin dili seç",
     "english": "İngilizce",
-    "turkish": "Türkçe",
-    "hindi": "Hintçe",
-    "portuguese": "Portekizce"
+    "turkish": "Türkçe"
   },
   "home": {
     "welcome": "Hoş geldin 👋",
     "subtitle": "React Native Şablonu",
-    "boilerplateBadge": "Şablon",
     "whatsIncluded": "Neler Var",
     "includedHint": "Hızlı başlamak için çekirdek araçlar dahil.",
     "reactNavigation": "React Navigation",
@@ -37,15 +32,7 @@
     "asyncStorage": "Asenkron Depolama",
     "asyncStorageDesc": "Yerel anahtar-değer depolama",
     "vectorIcons": "Vektör İkonlar",
-    "vectorIconsDesc": "Sekmeler ve arayüz için ikon kütüphanesi",
-    "languageTestTitle": "i18n Testi:",
-    "languageTestBody": "Test etmek için dil seçin!",
-    "languageTestLine": "<1>i18n</1> Testi: <2>dil</2> seçerek test edin!",
-    "repoTitle": "Projeye destek olun",
-    "repoBody": "Bu şablonu beğendin mi? GitHub'da yıldız ver veya yorum bırak.",
-    "repoButton": "GitHub Repository aç",
-    "repoModalTitle": "GitHub açılsın mı?",
-    "repoModalBody": "Repository tarayıcıda açılacak."
+    "vectorIconsDesc": "Sekmeler ve arayüz için ikon kütüphanesi"
   },
   "about": {
     "title": "Hakkında",
@@ -53,7 +40,15 @@
   },
   "settings": {
     "title": "Ayarlar",
-    "simpleMessage": "Buradaysan, React Navigation seni buraya getirdi."
+    "description": "Bu sayfa uygulamanın ayarlar sayfasıdır. Dil ve tema seçimini buradan yapabilirsiniz.",
+    "simpleMessage": "Buradaysan, React Navigation seni buraya getirdi.",
+    "languageLabel": "Dil",
+    "themeLabel": "Tema"
+  },
+  "theme": {
+    "system": "Sistem",
+    "dark": "Koyu",
+    "light": "Açık"
   },
   "privacy": {
     "title": "Gizlilik",

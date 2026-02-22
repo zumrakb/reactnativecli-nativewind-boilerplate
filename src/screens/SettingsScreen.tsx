@@ -1,51 +1,216 @@
-import React from 'react';
-import { View, Text, StatusBar } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StatusBar,
+  TouchableOpacity,
+  Modal,
+  ScrollView,
+  Pressable,
+} from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../contexts/ThemeContext';
+import type { ThemeMode } from '../contexts/ThemeContext';
+import { getSettingsScreenStyles } from '../styles/SettingsScreenStyles';
+
+const LANGUAGE_OPTIONS = [
+  { code: 'en', labelKey: 'languages.english', flag: '🇺🇸' },
+  { code: 'tr', labelKey: 'languages.turkish', flag: '🇹🇷' },
+] as const;
+
+const THEME_OPTIONS: { value: ThemeMode; labelKey: 'theme.system' | 'theme.dark' | 'theme.light'; icon: string }[] = [
+  { value: 'system', labelKey: 'theme.system', icon: '📱' },
+  { value: 'dark', labelKey: 'theme.dark', icon: '🌙' },
+  { value: 'light', labelKey: 'theme.light', icon: '☀️' },
+];
 
 const SettingsScreen: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { theme, setTheme, isDark } = useTheme();
+  const insets = useSafeAreaInsets();
+  const currentLanguage = (i18n.language || 'en').slice(0, 2);
+  const [languageModalVisible, setLanguageModalVisible] = useState(false);
+  const [themeModalVisible, setThemeModalVisible] = useState(false);
+
+  const currentLanguageOption = LANGUAGE_OPTIONS.find((o) => o.code === currentLanguage)
+    ?? LANGUAGE_OPTIONS[0];
+  const currentThemeOption = THEME_OPTIONS.find((o) => o.value === theme) ?? THEME_OPTIONS[0];
+
+  const styles = getSettingsScreenStyles(isDark, theme);
 
   return (
-    <SafeAreaView className="flex-1" style={{ backgroundColor: '#0a0e27' }}>
-      <StatusBar barStyle="light-content" backgroundColor="#0a0e27" />
+    <SafeAreaView className="flex-1" style={styles.screen}>
+      <StatusBar
+        barStyle={isDark ? 'light-content' : 'dark-content'}
+        backgroundColor={styles.screen.backgroundColor}
+      />
 
-      <View className="flex-1 px-6 pt-10">
-        <View className="mb-6">
-          <Text className="text-white text-3xl font-bold">{t('settings.title')}</Text>
-          <Text className="text-slate-300 text-sm mt-2">
-            {t('common.navBody')}
-          </Text>
-        </View>
-
-        <View className="rounded-3xl border border-white/10 bg-white/5 p-6 mb-4">
-          <View className="flex-row items-center mb-3">
-            <View className="w-10 h-10 rounded-xl items-center justify-center bg-white/10">
-              <Text className="text-white text-lg">🧭</Text>
-            </View>
-            <Text className="text-white text-lg font-semibold ml-3">
-              {t('common.navTitle')}
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <View className="px-5 pt-6 pb-16">
+          {/* Başlık ve sayfa açıklaması */}
+          <View className="mb-8">
+            <Text className="text-2xl font-bold" style={styles.title}>
+              {t('settings.title')}
+            </Text>
+            <Text className="text-sm mt-2 leading-5" style={styles.subtitle}>
+              {t('settings.description')}
             </Text>
           </View>
-          <Text className="text-slate-200 text-base leading-6">
-            {t('common.navBody')}
-          </Text>
-        </View>
 
-        <View className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <View className="flex-row items-center mb-3">
-            <View className="w-10 h-10 rounded-xl items-center justify-center bg-white/10">
-              <Text className="text-white text-lg">🌐</Text>
+          {/* Dil selectbox */}
+          <View className="rounded-2xl border p-5 mb-4" style={styles.card}>
+            <View className="flex-row items-center mb-3">
+              <View className="w-9 h-9 rounded-lg items-center justify-center mr-3" style={styles.iconBox}>
+                <Text className="text-base">🌐</Text>
+              </View>
+              <Text className="text-base font-semibold" style={styles.title}>
+                {t('settings.languageLabel')}
+              </Text>
             </View>
-            <Text className="text-white text-lg font-semibold ml-3">
-              {t('common.languageTitle')}
-            </Text>
+            <TouchableOpacity
+              onPress={() => setLanguageModalVisible(true)}
+              activeOpacity={0.85}
+              className="rounded-xl border px-4 py-3 flex-row items-center justify-between"
+              style={styles.selectTrigger}
+            >
+              <Text className="text-sm font-medium" style={styles.title}>
+                {currentLanguageOption.flag} {t(currentLanguageOption.labelKey)}
+              </Text>
+              <Text className="opacity-50 text-sm">▼</Text>
+            </TouchableOpacity>
           </View>
-          <Text className="text-slate-200 text-base leading-6">
-            {t('common.languageBody')}
-          </Text>
+
+          {/* Tema selectbox */}
+          <View className="rounded-2xl border p-5" style={styles.card}>
+            <View className="flex-row items-center mb-3">
+              <View className="w-9 h-9 rounded-lg items-center justify-center mr-3" style={styles.iconBox}>
+                <Text className="text-base">🌓</Text>
+              </View>
+              <Text className="text-base font-semibold" style={styles.title}>
+                {t('settings.themeLabel')}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => setThemeModalVisible(true)}
+              activeOpacity={0.85}
+              className="rounded-xl border px-4 py-3 flex-row items-center justify-between"
+              style={styles.selectTrigger}
+            >
+              <Text className="text-sm font-medium" style={styles.title}>
+                {currentThemeOption.icon} {t(currentThemeOption.labelKey)}
+              </Text>
+              <Text className="opacity-50 text-sm">▼</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ScrollView>
+
+      {/* Dil seçim modal */}
+      <Modal
+        transparent
+        animationType="fade"
+        visible={languageModalVisible}
+        onRequestClose={() => setLanguageModalVisible(false)}
+      >
+        <Pressable
+          className="flex-1 justify-end"
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+          onPress={() => setLanguageModalVisible(false)}
+        >
+          <Pressable
+            className="rounded-t-2xl border-t pt-4 px-5"
+            style={[
+              styles.modalContent,
+              { paddingBottom: Math.max(insets.bottom, 20) },
+            ]}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <Text className="text-base font-semibold mb-4" style={styles.title}>
+              {t('settings.languageLabel')}
+            </Text>
+            {LANGUAGE_OPTIONS.map((opt) => {
+              const isActive = currentLanguage === opt.code;
+              return (
+                <TouchableOpacity
+                  key={opt.code}
+                  onPress={() => {
+                    i18n.changeLanguage(opt.code);
+                    setLanguageModalVisible(false);
+                  }}
+                  activeOpacity={0.85}
+                  className="rounded-xl px-4 py-3 mb-2 flex-row items-center border"
+                  style={[
+                    isActive ? styles.modalOptionActive : styles.modalOption,
+                    { borderWidth: 1 },
+                  ]}
+                >
+                  <Text className="text-base mr-2">{opt.flag}</Text>
+                  <Text
+                    className="text-sm font-medium"
+                    style={isActive ? styles.modalOptionTextActive : styles.modalOptionText}
+                  >
+                    {t(opt.labelKey)}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      {/* Tema seçim modal */}
+      <Modal
+        transparent
+        animationType="fade"
+        visible={themeModalVisible}
+        onRequestClose={() => setThemeModalVisible(false)}
+      >
+        <Pressable
+          className="flex-1 justify-end"
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+          onPress={() => setThemeModalVisible(false)}
+        >
+          <Pressable
+            className="rounded-t-2xl border-t pt-4 px-5"
+            style={[
+              styles.modalContent,
+              { paddingBottom: Math.max(insets.bottom, 20) },
+            ]}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <Text className="text-base font-semibold mb-4" style={styles.title}>
+              {t('settings.themeLabel')}
+            </Text>
+            {THEME_OPTIONS.map((opt) => {
+              const isActive = theme === opt.value;
+              return (
+                <TouchableOpacity
+                  key={opt.value}
+                  onPress={() => {
+                    setTheme(opt.value);
+                    setThemeModalVisible(false);
+                  }}
+                  activeOpacity={0.85}
+                  className="rounded-xl px-4 py-3 mb-2 flex-row items-center border"
+                  style={[
+                    isActive ? styles.modalOptionActive : styles.modalOption,
+                    { borderWidth: 1 },
+                  ]}
+                >
+                  <Text className="text-base mr-2">{opt.icon}</Text>
+                  <Text
+                    className="text-sm font-medium"
+                    style={isActive ? styles.modalOptionTextActive : styles.modalOptionText}
+                  >
+                    {t(opt.labelKey)}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </Pressable>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 };
