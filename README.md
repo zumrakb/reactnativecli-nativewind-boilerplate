@@ -1,7 +1,6 @@
 <div align="center">
-  <img src="./src/assets/banner.png" alt="React Native CLI NativeWind Boilerplate" style="max-width: 1200px; width: 100%; height: auto;" />
   <h1>React Native CLI NativeWind Boilerplate</h1>
-  <p>Modern, minimal React Native CLI starter with NativeWind, React Navigation, and i18n built in.</p>
+  <p>Modern, minimal React Native CLI starter with NativeWind, React Navigation, i18n and theme (dark/light/system).</p>
 
   <p>
     <a href="https://github.com/zumrakb/reactnativecli-nativewind-boilerplate/stargazers">
@@ -20,26 +19,23 @@
 </div>
 
 ## Overview
-This boilerplate helps you start fast with a clean architecture, a modern UI baseline, and the essential tooling already configured.
-
-If you like it, give it a star or leave a comment. It truly helps.
+This boilerplate helps you start fast with a clean architecture, a modern UI baseline, and the essential tooling already configured. Copy the repo for a new project and follow "Yeni proje için" below.
 
 ## Features
 - ✅ React Native CLI with TypeScript
 - 🎨 NativeWind (Tailwind CSS for React Native)
-- 🧭 React Navigation with bottom tabs preconfigured
-- 🌍 i18n with persistent language selection
-- 🧩 Vector icons ready for tabs and UI
-- 💾 AsyncStorage for local key-value storage
-- ✨ Clean, minimal folder structure
+- 🧭 React Navigation with bottom tabs (config in `src/navigation/tabConfig.tsx`)
+- 🌍 i18n (EN/TR) with persistent language selection
+- 🌓 Theme: system / dark / light with persistence
+- 🧩 Vector icons for tabs and UI
+- 💾 AsyncStorage for preferences
+- 📁 Styles in `src/styles/` (theme-aware)
 
 ## Requirements
-- Node 20+ (recommended)
-- Android Studio for Android
-- Xcode for iOS (macOS only)
-- Java 17 (for Android builds)
-
-Also install the React Native CLI dependencies from the official React Native environment setup (Quickstart tab).
+- Node 20+
+- Android Studio (Android), Xcode (iOS, macOS)
+- Java 17 (Android)
+- React Native CLI environment (official Quickstart)
 
 ## Quick Start
 ```bash
@@ -48,59 +44,55 @@ cd reactnativecli-nativewind-boilerplate
 npm install
 ```
 
-### Android
+### iOS (before first run)
 ```bash
-npm run android
+cd ios && pod install && cd ..
 ```
 
-### iOS
-```bash
-cd ios
-pod install
-cd ..
-
-npm run ios
-```
-
-## Development Workflow
-Start Metro in a separate terminal for faster iteration:
+### Run
 ```bash
 npm start
-```
-
-Then in another terminal:
-```bash
-npm run android
-# or
-npm run ios
+# In another terminal:
+npm run android   # or  npm run ios
 ```
 
 ## Project Structure
-- `src/navigation/` navigation setup and tab bar
-- `src/screens/` app screens
-- `src/i18n/` translations and i18n setup
-- `global.css` NativeWind styles
-- `App.tsx` app entry
+| Path | Description |
+|------|-------------|
+| `src/navigation/` | Tab config (`tabConfig.tsx`), `AppNavigator` |
+| `src/screens/` | App screens (Home, About, Privacy, Settings) |
+| `src/styles/` | Screen styles + `themeColors.ts` |
+| `src/contexts/` | `ThemeContext` (theme + isDark) |
+| `src/i18n/` | i18n setup and `translations/` (en, tr) |
+| `src/types/` | `navigation.ts` (Screen type, RootStackParamList) |
+| `global.css` | NativeWind; `App.tsx` app entry |
 
-## Styling (NativeWind)
-NativeWind is configured, so you can style components using Tailwind utility classes via `className`.
-
-## Navigation
-React Navigation is set up with a bottom tab bar. You can add new screens in `src/screens` and register them in `src/navigation/AppNavigator.tsx`.
+## Adding a new tab/screen
+1. **Types:** In `src/types/navigation.ts`, add the screen name to `Screen` and to `RootStackParamList` (e.g. `NewScreen: undefined`).
+2. **Config:** In `src/navigation/tabConfig.tsx`, add an entry: `name`, `component`, `labelKey`, `icon` (Ionicons name string).
+3. **Screen:** Create the screen component in `src/screens/` and optionally a style file in `src/styles/`.
 
 ## Localization (i18n)
-Language selection is built in and persisted using AsyncStorage. Update translations in `src/i18n/translations`.
+Edit `src/i18n/translations/en.json` and `tr.json`. Add new keys as needed. Language is chosen in Settings and persisted.
 
-## App Preview
-Replace the banner in `src/assets/banner.png` with your own image if needed.
+## Theme
+Settings page: theme can be **System**, **Dark**, or **Light**. Stored in AsyncStorage. Use `useTheme()` for `isDark` and `theme` in components; styles use `src/styles/themeColors.ts`.
+
+## Yeni proje için (template checklist)
+1. **Uygulama adı:** `app.json` içinde `name` ve `displayName` güncelle. İstersen native projelerde (iOS/Android) uygulama adını da değiştir.
+2. **Demo içerik:** Kodda `ŞABLON DEMO` yorumlarıyla işaretli bölümleri sil:
+   - **HomeScreen:** `FEATURE_CARDS`, rows döngüsü ve "Neler var" kutuları
+   - **AboutScreen:** İki demo kartı (Başlangıç–Bitiş arası)
+   - **PrivacyScreen:** İki demo kartı (Başlangıç–Bitiş arası)
+3. **Ortam değişkenleri:** `.env.example` dosyasını `.env` olarak kopyala ve API URL / key vb. ekle. `.env` commit edilmez.
+
+## Environment variables
+Copy `.env.example` to `.env` and fill in values. Do not commit `.env`. Use a config module (e.g. `src/config/env.ts`) to read them if needed.
 
 ## Troubleshooting
-- If Android fails to merge assets after running `npx react-native-asset`, remove duplicate fonts in:
-  `android/app/src/main/assets/fonts`
-- If Gradle caches are corrupted, remove `.gradle/caches` and rebuild.
-
-## Contributing
-PRs and suggestions are welcome. If you build something cool with this boilerplate, feel free to share it.
+- **Android:** Duplicate fonts after `npx react-native-asset` → remove duplicates in `android/app/src/main/assets/fonts`.
+- **Gradle:** Clear `.gradle/caches` and rebuild if caches are corrupted.
+- **Metro:** `npm start` with `--reset-cache` if bundler behaves oddly.
 
 ## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+MIT. See `LICENSE`.

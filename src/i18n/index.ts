@@ -3,21 +3,16 @@ import { initReactI18next } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as RNLocalize from 'react-native-localize';
 
+import { STORAGE_KEYS } from '../constants/storageKeys';
 import en from './translations/en.json';
 import tr from './translations/tr.json';
-import hi from './translations/hi.json';
-import pt from './translations/pt.json';
 
 const resources = {
   en: { translation: en },
   tr: { translation: tr },
-  hi: { translation: hi },
-  pt: { translation: pt },
 };
 
 type SupportedLanguage = keyof typeof resources;
-
-const STORAGE_KEY = 'language';
 
 const getDeviceLanguage = (): SupportedLanguage => {
   const locales = RNLocalize.getLocales();
@@ -34,7 +29,7 @@ const languageDetector = {
   init: () => {},
   detect: async (callback: (lang: string) => void) => {
     try {
-      const savedLanguage = await AsyncStorage.getItem(STORAGE_KEY);
+      const savedLanguage = await AsyncStorage.getItem(STORAGE_KEYS.LANGUAGE);
       if (savedLanguage && savedLanguage in resources) {
         callback(savedLanguage);
         return;
@@ -46,7 +41,7 @@ const languageDetector = {
   },
   cacheUserLanguage: async (language: string) => {
     try {
-      await AsyncStorage.setItem(STORAGE_KEY, language);
+      await AsyncStorage.setItem(STORAGE_KEYS.LANGUAGE, language);
     } catch {
       // ignore storage errors
     }

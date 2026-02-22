@@ -3,16 +3,24 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../contexts/ThemeContext';
 import { RootStackParamList } from '../types/navigation';
-import HomeScreen from '../screens/HomeScreen';
-import AboutScreen from '../screens/AboutScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import PrivacyScreen from '../screens/PrivacyScreen';
+import { TAB_CONFIG } from './tabConfig';
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
+const TAB_BAR_BASE_HEIGHT = 64;
+const TAB_BAR_BASE_PADDING_BOTTOM = 10;
+
 const AppNavigator: React.FC = () => {
   const { t } = useTranslation();
+  const { isDark } = useTheme();
+  const insets = useSafeAreaInsets();
+  const tabBarBg = isDark ? '#0b1222' : '#ffffff';
+  const tabBarBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)';
+  const tabInactive = isDark ? '#94a3b8' : '#64748b';
+  const tabBarPaddingBottom = TAB_BAR_BASE_PADDING_BOTTOM + insets.bottom;
 
   return (
     <NavigationContainer>
@@ -21,66 +29,41 @@ const AppNavigator: React.FC = () => {
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: '#0b1222',
-            borderTopColor: 'rgba(255, 255, 255, 0.08)',
-            height: 64,
-            paddingBottom: 10,
+            backgroundColor: tabBarBg,
+            borderTopColor: tabBarBorder,
+            height: TAB_BAR_BASE_HEIGHT + insets.bottom,
+            paddingBottom: tabBarPaddingBottom,
           },
           tabBarActiveTintColor: '#38bdf8',
-          tabBarInactiveTintColor: '#94a3b8',
+          tabBarInactiveTintColor: tabInactive,
           tabBarLabelStyle: {
             fontSize: 12,
             fontWeight: '600',
           },
           tabBarIcon: ({ color, size }) => {
+            const item = TAB_CONFIG.find((c) => c.name === route.name);
             const iconSize = size ?? 22;
-            switch (route.name) {
-              case 'Dashboard':
-                return <Ionicons name="home-outline" size={iconSize} color={color} />;
-              case 'About':
-                return <Ionicons name="information-circle-outline" size={iconSize} color={color} />;
-              case 'Privacy':
-                return <Ionicons name="lock-closed-outline" size={iconSize} color={color} />;
-              case 'Settings':
-                return <Ionicons name="settings-outline" size={iconSize} color={color} />;
-              default:
-                return <Ionicons name="ellipse-outline" size={iconSize} color={color} />;
-            }
+            return (
+              <Ionicons
+                name={(item?.icon ?? 'ellipse-outline') as any}
+                size={iconSize}
+                color={color}
+              />
+            );
           },
         })}
       >
-        <Tab.Screen
-          name="Dashboard"
-          component={HomeScreen}
-          options={{
-            title: t('common.home'),
-            tabBarLabel: t('common.home'),
-          }}
-        />
-        <Tab.Screen
-          name="About"
-          component={AboutScreen}
-          options={{
-            title: t('common.about'),
-            tabBarLabel: t('common.about'),
-          }}
-        />
-        <Tab.Screen
-          name="Privacy"
-          component={PrivacyScreen}
-          options={{
-            title: t('common.privacy'),
-            tabBarLabel: t('common.privacy'),
-          }}
-        />
-        <Tab.Screen
-          name="Settings"
-          component={SettingsScreen}
-          options={{
-            title: t('common.settings'),
-            tabBarLabel: t('common.settings'),
-          }}
-        />
+        {TAB_CONFIG.map(({ name, component, labelKey }) => (
+          <Tab.Screen
+            key={name}
+            name={name}
+            component={component}
+            options={{
+              title: t(labelKey),
+              tabBarLabel: t(labelKey),
+            }}
+          />
+        ))}
       </Tab.Navigator>
     </NavigationContainer>
   );
